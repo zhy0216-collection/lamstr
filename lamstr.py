@@ -4,7 +4,9 @@ import re
 
 OP_RE = re.compile(r"[-\*/\+\.]")
 
-VARIABLE_RE = ""
+LEFT_LACK_OP_RE = re.compile(r"^[-\*/\+\.](\w+)")
+
+VARIABLE_RE = re.compile("^([a-zA-Z_]\w*)")
 
 
 
@@ -16,7 +18,9 @@ VARIABLE_RE = ""
 class _LambdaStr(object):
 
     def __init__(self,expr, config=None):
-        self.expr = expr
+        self.expr = self.orginal_expr = expr
+
+        self.var_prefix = "_lam__"
 
         self.arguments = None
         self.return_expr = None
@@ -30,14 +34,25 @@ class _LambdaStr(object):
         self._parse()
 
     def _special_parse(self):
-        if OP_RE.search(self.expr) == None:
-            pass
-        else:
-            pass
+        left_lack_march = LEFT_LACK_OP_RE.search(self.expr)
+        if  left_lack_march != None:
+            print "VARIABLE_RE.findall(self.expr)", VARIABLE_RE.findall(self.expr)
+            var = VARIABLE_RE.search(self.expr)
+            if var is None:
+                self.arguments = [self.var_prefix]
+                self.return_expr = self.var_prefix + self.expr
+            else:
+
+                self.arguments = [var, self.var_prefix+var]
+                self.return_expr = self.var_prefix+var + self.expr
+
+
+        pass
 
 
     def _parse(self):
         if self.expr.find(self.return_op) == -1:
+            self.expr = self.orginal_expr.replace(" ", "")
             return self._special_parse()
 
         arguments, self.return_expr = self.expr.split(self.return_op)
