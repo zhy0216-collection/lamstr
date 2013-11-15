@@ -2,7 +2,7 @@ import re
 
 
 
-OP_RE = re.compile(r"[\+\.-\*\%]")
+OP_RE = re.compile(r"[-\*/\+\.]")
 
 VARIABLE_RE = ""
 
@@ -17,7 +17,9 @@ class _LambdaStr(object):
 
     def __init__(self,expr, config=None):
         self.expr = expr
-        self.function = None
+
+        self.arguments = None
+        self.return_expr = None
 
 
         #config stuff
@@ -27,23 +29,31 @@ class _LambdaStr(object):
 
         self._parse()
 
-    def special(self):
-        pass
+    def _special_parse(self):
+        if OP_RE.search(self.expr) == None:
+            pass
+        else:
+            pass
+
 
     def _parse(self):
         if self.expr.find(self.return_op) == -1:
-            return self._special_parse(self.expr)
+            return self._special_parse()
 
-        arguments, return_expr = self.expr.split(self.return_op)
-        print "arguments", arguments, "return_expr", return_expr
+        arguments, self.return_expr = self.expr.split(self.return_op)
+        self.arguments = arguments.split(",")
+        print "self.arguments", self.arguments, "self.return_expr", self.return_expr
 
-        code = "_lam = lambda %s: %s"%(arguments,return_expr)
+
+    @property
+    def function(self):
+        code = "_lam = lambda %s: %s"%(",".join(self.arguments),self.return_expr)
         print "code:", code
         result = {}
         exec compile(code, '<string>', 'exec') in result
         print "result", result["_lam"]
+        return result["_lam"]
 
-        self.function = result["_lam"]
 
 
     def __call__(self, *arg):
