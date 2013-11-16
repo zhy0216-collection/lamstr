@@ -36,15 +36,24 @@ class _LambdaStr(object):
     def _special_parse(self):
         left_lack_march = LEFT_LACK_OP_RE.search(self.expr)
         if  left_lack_march != None:
+            # case *2 +1 suh stuff
             print "VARIABLE_RE.findall(self.expr)", VARIABLE_RE.findall(self.expr)
             var = VARIABLE_RE.search(self.expr)
             if var is None:
+                # /, *
                 self.arguments = [self.var_prefix]
                 self.return_expr = self.var_prefix + self.expr
             else:
-
+                # /2 , *2
                 self.arguments = [var, self.var_prefix+var]
                 self.return_expr = self.var_prefix+var + self.expr
+
+        else:
+            # check right
+            # 2* , x directly
+            vars = set(VARIABLE_RE.findall(self.expr))
+            self.arguments = list(vars)
+            self.return_expr = self.expr
 
 
         pass

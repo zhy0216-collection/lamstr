@@ -25,10 +25,10 @@ def test_single_arg_left_lack_op():
     eq_(lam(".a")(my_mock), 10)
     eq_(lam(".some_method()")(my_mock), 3.14)
 
-# def test_special_parse_no_return_op():
-#     eq_(lam("x")(1), 1)
-#     eq_(lam("x*x")(5), 25)
-#     eq_(lam("x**3")(5), 64)
+def test_special_parse_no_return_op():
+    eq_(lam("x")(1), 1)
+    eq_(lam("x*x")(5), 25)
+    eq_(lam("x**3")(4), 64)
 
 
 # def test_it():
