@@ -6,6 +6,8 @@ OP_RE = re.compile(r"[-\*/\+\.]")
 
 LEFT_LACK_OP_RE = re.compile(r"^[-\*/\+\.](\w+)")
 
+RIGHT_LACK_OP_RE = re.compile("(\w+[-\*/\+\.]|\*\*)*\w+") 
+
 VARIABLE_RE = re.compile("([a-zA-Z_]\w*)")
 
 
@@ -40,12 +42,16 @@ class _LambdaStr(object):
         return self.left_lack_march is not None
 
     def _check_if_right_lack(self):
-        return False
+        self.right_lack_march = RIGHT_LACK_OP_RE.search(self.expr)
+        return self.right_lack_march is None
 
     def _add_left_var(self):
             # /2, *2,, single?
         self.arguments = [self.var_prefix]
         self.return_expr = self.var_prefix + self.expr
+
+    def _add_right_var(self):
+        pass
 
     def _special_parse(self):
         
