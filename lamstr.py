@@ -19,7 +19,7 @@ VARIABLE_RE = re.compile("([a-zA-Z_]\w*)")
 
 
 
-
+# check if I can solve this problem http://math.andrej.com/2009/04/09/pythons-lambda-is-broken/
 
 
 class _LambdaStr(object):
@@ -57,6 +57,8 @@ class _LambdaStr(object):
         self.return_expr = self.var_prefix + self.expr
 
     def _add_right_var(self):
+        # it is pretty diffcult to find the right rex because of ** op
+        # ... struggle with it
         if RIGHT_LACK_OP_RE_CASE0.search(self.expr):
             pass
 
