@@ -25,6 +25,9 @@ class _LambdaStr(object):
         self.arguments = None
         self.return_expr = None
 
+        self.left_lack_march = None
+        self.right_lack_march = None
+
 
         #config stuff
         if config == None:
@@ -33,9 +36,16 @@ class _LambdaStr(object):
 
         self._parse()
 
+    def _check_if_left_lack(self):
+        self.left_lack_march = LEFT_LACK_OP_RE.search(self.expr)
+        return self.left_lack_march is not None
+
+    def _check_if_right_lack(self):
+        return False
+
     def _special_parse(self):
-        left_lack_march = LEFT_LACK_OP_RE.search(self.expr)
-        if  left_lack_march != None:
+        
+        if  self._check_if_left_lack():
             # case *2 +1 suh stuff
             print "VARIABLE_RE.findall(self.expr)", VARIABLE_RE.findall(self.expr)
             var = VARIABLE_RE.search(self.expr)
@@ -47,6 +57,10 @@ class _LambdaStr(object):
                 # /2 , *2
                 self.arguments = [var, self.var_prefix+var]
                 self.return_expr = self.var_prefix+var + self.expr
+
+        elif self._check_if_right_lack():
+            # this should return recursively
+            pass
 
         else:
             # check right
