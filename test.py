@@ -18,6 +18,7 @@ def test_multi_args_return_lambda_gen():
 def test_single_arg_left_lack_op():
     eq_(lam("-5")(1), -4)
     eq_(lam("*2")(7), 14)
+    eq_(lam("**2")(3), 9)
 
     my_mock = Mock()
     my_mock.a = 10
@@ -29,5 +30,18 @@ def test_special_parse_no_return_op():
     eq_(lam("x")(1), 1)
     eq_(lam("x*x")(5), 25)
     eq_(lam("x**3")(4), 64)
+
+
+# def test_single_arg_right_lack_op_case0():
+#     eq_(lam("2**")(10), 20)
+
+
+
+
+
+
+
+
+
 
 

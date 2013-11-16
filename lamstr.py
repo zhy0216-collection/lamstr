@@ -4,13 +4,15 @@ import uuid
 
 OP_RE = re.compile(r"[-\*/\+\.]")
 
-LEFT_LACK_OP_RE = re.compile(r"^[-\*/\+\.](\w+)")
+LEFT_LACK_OP_RE = re.compile(r"^([-\*/\+\.]|\*\*)(\w+)")
 
 RIGHT_LACK_OP_RE = re.compile("(\w+[-\*/\+\.]|\*\*)*\w+")
 
-RIGHT_LACK_OP_RE_CASE1 = re.compile(r"(\*[-/\+\.])")
-RIGHT_LACK_OP_RE_CASE2 = re.compile(r"([-/\+\.][\*])")
-RIGHT_LACK_OP_RE_CASE3 = re.compile(r"([-/\+\.\*]\b)")
+
+# RIGHT_LACK_OP_RE_CASE0 = re.compile(r"(\*\*[-/\+\.])")
+# RIGHT_LACK_OP_RE_CASE1 = re.compile(r"(\*[-/\+\.])")
+# RIGHT_LACK_OP_RE_CASE2 = re.compile(r"([-/\+\.][\*])")
+# RIGHT_LACK_OP_RE_CASE3 = re.compile(r"([-/\+\.\*]\b)")
 
 VARIABLE_RE = re.compile("([a-zA-Z_]\w*)")
 
@@ -55,7 +57,8 @@ class _LambdaStr(object):
         self.return_expr = self.var_prefix + self.expr
 
     def _add_right_var(self):
-        pass
+        if RIGHT_LACK_OP_RE_CASE0.search(self.expr):
+            pass
 
     def _special_parse(self):
         
@@ -88,7 +91,7 @@ class _LambdaStr(object):
         print "self.arguments", self.arguments, "self.return_expr", self.return_expr
 
     def _gen_random_var_name(self):
-        return str(uuid.uuid1()).replace("-", "")
+        return self.var_prefix + str(uuid.uuid1()).replace("-", "")
 
 
     @property
