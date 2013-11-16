@@ -6,8 +6,7 @@ OP_RE = re.compile(r"[-\*/\+\.]")
 
 LEFT_LACK_OP_RE = re.compile(r"^[-\*/\+\.](\w+)")
 
-VARIABLE_RE = re.compile("^([a-zA-Z_]\w*)")
-
+VARIABLE_RE = re.compile("([a-zA-Z_]\w*)")
 
 
 
@@ -43,20 +42,16 @@ class _LambdaStr(object):
     def _check_if_right_lack(self):
         return False
 
+    def _add_left_var(self):
+            # /2, *2,, single?
+        self.arguments = [self.var_prefix]
+        self.return_expr = self.var_prefix + self.expr
+
     def _special_parse(self):
         
         if  self._check_if_left_lack():
             # case *2 +1 suh stuff
-            print "VARIABLE_RE.findall(self.expr)", VARIABLE_RE.findall(self.expr)
-            var = VARIABLE_RE.search(self.expr)
-            if var is None:
-                # /, *
-                self.arguments = [self.var_prefix]
-                self.return_expr = self.var_prefix + self.expr
-            else:
-                # /2 , *2
-                self.arguments = [var, self.var_prefix+var]
-                self.return_expr = self.var_prefix+var + self.expr
+            self._add_left_var()
 
         elif self._check_if_right_lack():
             # this should return recursively
