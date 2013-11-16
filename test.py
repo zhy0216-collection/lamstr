@@ -31,7 +31,3 @@ def test_special_parse_no_return_op():
     eq_(lam("x**3")(4), 64)
 
 
-# def test_it():
-#     eq_(lam("/2")(2), 1)
-#     eq_(lam("+1")(2), 3)
-#     

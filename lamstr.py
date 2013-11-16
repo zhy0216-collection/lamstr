@@ -1,12 +1,16 @@
 import re
-
+import uuid
 
 
 OP_RE = re.compile(r"[-\*/\+\.]")
 
 LEFT_LACK_OP_RE = re.compile(r"^[-\*/\+\.](\w+)")
 
-RIGHT_LACK_OP_RE = re.compile("(\w+[-\*/\+\.]|\*\*)*\w+") 
+RIGHT_LACK_OP_RE = re.compile("(\w+[-\*/\+\.]|\*\*)*\w+")
+
+RIGHT_LACK_OP_RE_CASE1 = re.compile(r"(\*[-/\+\.])")
+RIGHT_LACK_OP_RE_CASE2 = re.compile(r"([-/\+\.][\*])")
+RIGHT_LACK_OP_RE_CASE3 = re.compile(r"([-/\+\.\*]\b)")
 
 VARIABLE_RE = re.compile("([a-zA-Z_]\w*)")
 
@@ -82,6 +86,9 @@ class _LambdaStr(object):
         arguments, self.return_expr = self.expr.split(self.return_op)
         self.arguments = arguments.split(",")
         print "self.arguments", self.arguments, "self.return_expr", self.return_expr
+
+    def _gen_random_var_name(self):
+        return str(uuid.uuid1()).replace("-", "")
 
 
     @property
