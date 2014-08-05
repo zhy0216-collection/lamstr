@@ -6,20 +6,10 @@ OP_RE = re.compile(r"[-\*/\+\.]")
 
 LEFT_LACK_OP_RE = re.compile(r"^([-\*/\+\.]|\*\*)(\w+)")
 
-RIGHT_LACK_OP_RE = re.compile("(\w+[-\*/\+\.]|\*\*)*\w+")
+RIGHT_LACK_OP_RE = re.compile(r"(\w+[-\*/\+\.]|\*\*)*\w+")
 
 
-# RIGHT_LACK_OP_RE_CASE0 = re.compile(r"(\*\*[-/\+\.])")
-# RIGHT_LACK_OP_RE_CASE1 = re.compile(r"(\*[-/\+\.])")
-# RIGHT_LACK_OP_RE_CASE2 = re.compile(r"([-/\+\.][\*])")
-# RIGHT_LACK_OP_RE_CASE3 = re.compile(r"([-/\+\.\*]\b)")
-
-VARIABLE_RE = re.compile("([a-zA-Z_]\w*)")
-
-
-
-
-# check if I can solve this problem http://math.andrej.com/2009/04/09/pythons-lambda-is-broken/
+VARIABLE_RE = re.compile(r"([a-zA-Z_]\w*)")
 
 
 class _LambdaStr(object):
@@ -53,8 +43,9 @@ class _LambdaStr(object):
 
     def _add_left_var(self):
             # /2, *2,, single?
-        self.arguments = [self.var_prefix]
-        self.return_expr = self.var_prefix + self.expr
+        var = self.var_prefix + self._gen_random_var_name()
+        self.arguments = [var]
+        self.return_expr = self.expr = var + self.expr
 
     def _add_right_var(self):
         # it is pretty diffcult to find the right rex because of ** op
@@ -67,25 +58,23 @@ class _LambdaStr(object):
         if  self._check_if_left_lack():
             # case *2 +1 suh stuff
             self._add_left_var()
+            self._special_parse()
 
         elif self._check_if_right_lack():
-            # this should return recursively
+            # recursive
             pass
 
         else:
-            # check right
-            # 2* , x directly
-            vars = set(VARIABLE_RE.findall(self.expr))
-            self.arguments = list(vars)
+            # return function directly
+            # 2*x
+            if not self.arguments:
+                vars = set(VARIABLE_RE.findall(self.expr))
+                self.arguments = list(vars)
             self.return_expr = self.expr
-
-
-        pass
-
 
     def _parse(self):
         if self.expr.find(self.return_op) == -1:
-            self.expr = self.orginal_expr.replace(" ", "")
+            self.expr = self.orginal_expr.strip()
             return self._special_parse()
 
         arguments, self.return_expr = self.expr.split(self.return_op)
@@ -106,11 +95,8 @@ class _LambdaStr(object):
         return result["_lam"]
 
 
-
     def __call__(self, *arg):
         return self.function(*arg)
-
-
 
 
 def lam(expr):

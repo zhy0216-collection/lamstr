@@ -33,10 +33,25 @@ def test_special_parse_no_return_op():
     eq_(lam("x")(1), 1)
     eq_(lam("x*x")(5), 25)
     eq_(lam("x**3")(4), 64)
+    eq_(lam("x+y")(4, 5), 9)
 
 
 # def test_single_arg_right_lack_op_case0():
 #     eq_(lam("2**")(10), 20)
+
+
+
+
+## http://math.andrej.com/2009/04/09/pythons-lambda-is-broken/
+def test_im_not_broken():
+    func_list = [lam("x+%s"%i) for i in range(10)]
+    eq_(func_list[0](0), 0)
+    eq_(func_list[7](2), 9)
+
+
+
+
+
 
 
 
