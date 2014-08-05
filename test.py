@@ -11,8 +11,11 @@ def test_single__arg_return_lambda_gen():
 
 def test_multi_args_return_lambda_gen():
     eq_(lam("x,y->x+y")(1,2), 3)
+    eq_(lam("x y->x+y")(1,2), 3)
     eq_(lam("x,y->x%y")(7,3), 1)
+    eq_(lam("x y->x%y")(7,3), 1)
     eq_(lam("x,y,z->x-y+z")(3,4,6), 5)
+    eq_(lam("x y z->x-y+z")(3,4,6), 5)
 
 
 def test_single_arg_left_lack_op():

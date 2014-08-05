@@ -89,7 +89,7 @@ class _LambdaStr(object):
             return self._special_parse()
 
         arguments, self.return_expr = self.expr.split(self.return_op)
-        self.arguments = arguments.split(",")
+        self.arguments = VARIABLE_RE.findall(arguments)
         print "self.arguments", self.arguments, "self.return_expr", self.return_expr
 
     def _gen_random_var_name(self):
